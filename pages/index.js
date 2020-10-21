@@ -1,65 +1,41 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Link from 'next/link'
+import Router from 'next/router'
+import { Button } from 'antd'
+import { connect } from 'react-redux'
+import { setAdd, changeName } from '../store/actions'
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+const App = (props) => {
+    function goToUser() {
+        //手动路由：路径
+        //Router.push('/user/me/b')
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        //手动路由：路径 + 参数
+        Router.push({
+            pathname: '/user/me',
+            query: {
+                id: 2,
+                age: 32,
+            },
+        })
+    }
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    const { count, name, dispatch } = props
+    return (
+        <div>
+            {/* 自动路由 和 路由隐射 */}
+            <Link href="/a?id=1" as="/a/1">
+                <Button>文章</Button>
+            </Link>
+            <Button onClick={goToUser}>我的</Button>
+            <Button onClick={() => dispatch(setAdd())}>加分</Button>
+            <Button onClick={() => dispatch(changeName('大神'))}>该名</Button>
+            <p>{count}</p>
+            <p>{name}</p>
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+    )
 }
+
+export default connect(
+    (state) => state,
+    (dispatch) => ({ dispatch })
+)(App)
